@@ -11,6 +11,8 @@ namespace Progetto1.Models
         public int Id { get; set; }
         public string Nome { get; set; }
         public int Voto {  get; set; }
+        public int IdStudente { get; set; }
         public Studente Studente { get; set; }
+
     }
 }
