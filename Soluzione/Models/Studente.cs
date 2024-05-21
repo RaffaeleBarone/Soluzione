@@ -11,6 +11,6 @@ namespace Progetto1.Models
         public int Id { get; set; }
         public string Nome { get; set; }
         public string Cognome { get; set; }
-        public List<Esame> EsamiFatti {  get; set; }
+        public virtual List<Esame> EsamiFatti {  get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Progetto1.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Progetto1.Models;
 
 namespace Progetto1.Manager
 {
@@ -24,22 +26,24 @@ namespace Progetto1.Manager
             {
                 try
                 {
-                    var studenteDaRimuovere = _appDbContext.Studenti.SingleOrDefault(s => s.Id == studenteId);
+                    var studenteDaRimuovere = _appDbContext.Studenti.Include(s => s.EsamiFatti).SingleOrDefault(s => s.Id == studenteId);
 
                     if (studenteDaRimuovere != null)
                     {
                         _appDbContext.Esami.RemoveRange(studenteDaRimuovere.EsamiFatti);
-                        _appDbContext.SaveChangesAsync();
                         _appDbContext.Studenti.Remove(studenteDaRimuovere);
-                        _appDbContext.SaveChangesAsync();
+                        await _appDbContext.SaveChangesAsync();
                         dbContextTransaction.Commit();
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     dbContextTransaction.Rollback();
                 }
 
+                using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
+                ILogger logger = factory.CreateLogger("Program");
+                logger.LogInformation("Modifiche avvenute!");
 
                 //_appDbContext.Studenti.Remove(new Studente { Nome = nome, Cognome = cognome });
                 await _appDbContext.SaveChangesAsync();

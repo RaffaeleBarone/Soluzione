@@ -1,10 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Progetto1;
 using Progetto1.Extensions;
 using Progetto1.Manager;
-using Progetto1.Models;
 
 
 class Program
@@ -15,22 +12,22 @@ class Program
     {
         InizializeConfiguration();
         InizializeServices();
-       var studenteManager = _serviceProvider.GetRequiredService<IStudenteManager>();
-       var esameManager = _serviceProvider.GetRequiredService<IEsameManager>();
+        var studenteManager = _serviceProvider.GetRequiredService<IStudenteManager>();
+        var esameManager = _serviceProvider.GetRequiredService<IEsameManager>();
         var Nome = "Raffaele";
         //var idStudente = await studenteManager.AddStudente(Nome, "Barone");
-        
+
         //var NomeEsame = "Programmazione 1";
         //var VotoEsame = 22;
-       
+
         //var idEsame = await esameManager.AddEsame(NomeEsame, VotoEsame, idStudente);
         //if(Nome == "Raffaele")
         //{
 
         //}
         await esameManager.RemoveEsame(1);
-       
-        
+
+
 
     }
 
@@ -39,9 +36,9 @@ class Program
         _serviceProvider = new ServiceCollection()
             .AddDbContextServices(_config)
             .BuildServiceProvider();
-           
 
-  
+
+
     }
 
     private static void InizializeConfiguration()
