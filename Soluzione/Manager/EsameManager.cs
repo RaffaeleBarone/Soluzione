@@ -1,4 +1,5 @@
-﻿using Progetto1.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Progetto1.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,16 +15,25 @@ namespace Progetto1.Manager
         {
             _appDbContext = appDbContext;
         }
-        public Task<int> AddEsame(string nome)
+        public async Task<int> AddEsame(string nome, int voto, int idStudente)
         {
-            _appDbContext.Esami.Add(new Esame { Nome = nome});
-            return _appDbContext.SaveChangesAsync();
+            var Esame = new Esame { Nome = nome, Voto = voto, IdStudente = idStudente };
+            _appDbContext.Esami.Add(Esame);
+             await _appDbContext.SaveChangesAsync();
+            return Esame.Id;
+            
         }
 
-        public Task<int> RemoveEsame(string nome)
+        public async Task RemoveEsame(int id)
         {
-            _appDbContext.Esami.Remove(new Esame { Nome = nome });
-            return _appDbContext.SaveChangesAsync();
+            var esameDaRimuovere = await _appDbContext.Esami.FirstOrDefaultAsync(x => x.Id == id);
+            if(esameDaRimuovere != null)
+            {
+                _appDbContext.Esami.Remove(esameDaRimuovere);
+                await _appDbContext.SaveChangesAsync();
+            }
+           
+
         }
 
 

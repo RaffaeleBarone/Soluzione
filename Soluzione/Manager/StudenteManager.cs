@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Progetto1.Models;
+﻿using Progetto1.Models;
 
 namespace Progetto1.Manager
 {
@@ -10,18 +9,43 @@ namespace Progetto1.Manager
         {
             _appDbContext = appDbContext;
         }
-        public Task<int> AddStudente(string nome, string cognome)
+        public async Task<int> AddStudente(string nome, string cognome)
         {
-            _appDbContext.Studenti.Add(new Studente { Nome = nome, Cognome = cognome });
-            return _appDbContext.SaveChangesAsync();             
+            var studente = new Studente { Nome = nome, Cognome = cognome };
+            _appDbContext.Studenti.Add(studente);
+            await _appDbContext.SaveChangesAsync();
+            return studente.Id;
         }
 
-        public Task<int> RemoveStudente(string nome, string cognome)
+        public async Task RemoveStudente(int studenteId)
         {
-            _appDbContext.Studenti.Remove(new Studente { Nome = nome, Cognome = cognome });
-            return _appDbContext.SaveChangesAsync();
+            //var studenteDaRimuovere = await _appDbContext.Studenti.GroupBy(x => x.EsamiFatti).ToListAsync();
+            using (var dbContextTransaction = _appDbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    var studenteDaRimuovere = _appDbContext.Studenti.SingleOrDefault(s => s.Id == studenteId);
+
+                    if (studenteDaRimuovere != null)
+                    {
+                        _appDbContext.Esami.RemoveRange(studenteDaRimuovere.EsamiFatti);
+                        _appDbContext.SaveChangesAsync();
+                        _appDbContext.Studenti.Remove(studenteDaRimuovere);
+                        _appDbContext.SaveChangesAsync();
+                        dbContextTransaction.Commit();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    dbContextTransaction.Rollback();
+                }
+
+
+                //_appDbContext.Studenti.Remove(new Studente { Nome = nome, Cognome = cognome });
+                await _appDbContext.SaveChangesAsync();
+            }
+
+
         }
-
-
     }
 }

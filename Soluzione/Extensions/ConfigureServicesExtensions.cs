@@ -17,6 +17,7 @@ namespace Progetto1.Extensions
             services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IStudenteManager, StudenteManager>();
+            services.AddScoped<IEsameManager, EsameManager>();
             return services;
 
         }

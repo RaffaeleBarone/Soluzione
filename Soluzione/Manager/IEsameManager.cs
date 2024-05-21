@@ -8,7 +8,7 @@ namespace Progetto1.Manager
 {
     public interface IEsameManager
     {
-        Task<int> AddEsame(string nome);
-        Task<int> RemoveEsame(string nome);
+        Task<int> AddEsame(string nome, int voto, int idStudente);
+        Task RemoveEsame(int id);
     }
 }

@@ -11,19 +11,26 @@ class Program
 {
     private static IConfigurationRoot _config;
     private static IServiceProvider _serviceProvider;
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
         InizializeConfiguration();
         InizializeServices();
        var studenteManager = _serviceProvider.GetRequiredService<IStudenteManager>();
+       var esameManager = _serviceProvider.GetRequiredService<IEsameManager>();
         var Nome = "Raffaele";
-        studenteManager.AddStudente(Nome, "Barone");
+        //var idStudente = await studenteManager.AddStudente(Nome, "Barone");
         
+        //var NomeEsame = "Programmazione 1";
+        //var VotoEsame = 22;
+       
+        //var idEsame = await esameManager.AddEsame(NomeEsame, VotoEsame, idStudente);
         //if(Nome == "Raffaele")
         //{
 
         //}
+        await esameManager.RemoveEsame(1);
        
+        
 
     }
 
